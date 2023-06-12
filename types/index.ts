@@ -11,8 +11,8 @@ export interface CustomButtonProps {
 }
 
 export interface SearchManufacturerProps {
-  manufacturers: string
-  setManufacturers: (manufacturers: string) => void
+  manufacturer: string
+  setManufacturer: (manufacturer: string) => void
 }
 
 export interface CarProps {
@@ -34,4 +34,22 @@ export interface CarProps {
 export enum CarTransmission {
   manual = 'Manual',
   automatic = 'Automatic'
+}
+
+export interface FilterProps {
+  manufacturer: string
+  year: number
+  fuel: string
+  limit: number
+  model: string
+}
+
+interface OptionsProps {
+  title: string
+  value: string
+}
+
+export interface CustomFilterProps {
+  title: string
+  options: OptionsProps[]
 }

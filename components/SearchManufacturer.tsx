@@ -8,7 +8,7 @@ import { manufacturers } from '@/constants'
 
 export default function SearchManufacturer({
   manufacturer,
-  setManufacturer,
+  setManufacturer
 }: SearchManufacturerProps) {
   const [query, setQuery] = useState('')
 
