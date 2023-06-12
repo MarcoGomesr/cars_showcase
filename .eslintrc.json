@@ -18,7 +18,7 @@
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/promise-function": "off",
-    "@typescript-eslint/no-float-promises": "off",
+    "@typescript-eslint/no-floating-promises": "off",
     "react/prop-types": "off",
     "react-in-jsx-scope": "off",
     "react/react-in-jsx-scope": "off"
