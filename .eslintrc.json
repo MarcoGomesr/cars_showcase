@@ -22,6 +22,11 @@
     "react/prop-types": "off",
     "react-in-jsx-scope": "off",
     "react/react-in-jsx-scope": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
 // {
