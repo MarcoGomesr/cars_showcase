@@ -5,10 +5,10 @@ import Image from 'next/image'
 import { Listbox, Transition } from '@headlessui/react'
 import { type CustomFilterProps } from '@/types'
 
-export default function CustomFilter<T>({
+export default function CustomFilter({
   options,
   setFilter
-}: CustomFilterProps<T>) {
+}: CustomFilterProps) {
   const [menu, setMenu] = useState(options[0])
 
   return (
