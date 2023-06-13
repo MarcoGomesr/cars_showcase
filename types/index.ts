@@ -20,7 +20,7 @@ export interface SearchManuFacturerProps {
 }
 
 export interface CarProps {
-  city_mpg: number
+  cityMpg: number
   class: string
   combination_mpg: number
   cylinders: number
