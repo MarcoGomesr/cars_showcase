@@ -5,30 +5,30 @@ import Image from 'next/image'
 import { Listbox, Transition } from '@headlessui/react'
 import { type CustomFilterProps } from '@/types'
 
-export default function CustomFilter({
+export default function CustomFilter<T>({
   options,
   setFilter
-}: CustomFilterProps) {
-  const [selected, setSelected] = useState(options[0])
+}: CustomFilterProps<T>) {
+  const [menu, setMenu] = useState(options[0])
 
   return (
     <div className="w-fit">
       <Listbox
-        value={selected}
+        value={menu}
         onChange={(e) => {
-          setSelected(e)
-          setFilter(e.value)
+          setMenu(e)
+          setFilter(e.value as unknown as T)
         }}
       >
         <div className="relative w-fit z-10">
           <Listbox.Button className="custom-filter__btn">
-            <span className="block truncate">{selected.title}</span>
+            <span className="block truncate">{menu.title}</span>
             <Image
               src="/chevron-up-down.svg"
               width={20}
               height={20}
               className="ml-4 object-contain"
-              alt="chevron-up-down"
+              alt="chevron_up-down"
             />
           </Listbox.Button>
           <Transition
@@ -37,10 +37,7 @@ export default function CustomFilter({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options
-              className="custom-filter__options"
-              placeholder="test today"
-            >
+            <Listbox.Options className="custom-filter__options">
               {options.map((option) => (
                 <Listbox.Option
                   key={option.title}
@@ -52,13 +49,15 @@ export default function CustomFilter({
                   value={option}
                 >
                   {({ selected }) => (
-                    <span
-                      className={`block truncate ${
-                        selected ? 'font-medium' : 'font-normal'
-                      }`}
-                    >
-                      {option.title}
-                    </span>
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? 'font-medium' : 'font-normal'
+                        }`}
+                      >
+                        {option.title}
+                      </span>
+                    </>
                   )}
                 </Listbox.Option>
               ))}

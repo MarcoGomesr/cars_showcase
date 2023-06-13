@@ -1,14 +1,14 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 'use client'
+
 import { type ShowMoreProps } from '@/types'
 import { CustomButton } from './CustomButton'
 
-export default function ShowMore({
-  pageNumber,
-  isNext,
-  setLimit
-}: ShowMoreProps) {
+const ShowMore = ({ pageNumber, isNext, setLimit }: ShowMoreProps) => {
   const handleNavigation = () => {
+    // Calculate the new limit based on the page number and navigation type
     const newLimit = (pageNumber + 1) * 10
+
     setLimit(newLimit)
   }
 
@@ -16,12 +16,14 @@ export default function ShowMore({
     <div className="w-full flex-center gap-5 mt-10">
       {!isNext && (
         <CustomButton
-          title="Show More"
           btnType="button"
-          containerStyles="bg-primary-blue rounded-full text-white "
+          title="Show More"
+          containerStyles="bg-primary-blue rounded-full text-white"
           handleClick={handleNavigation}
         />
       )}
     </div>
   )
 }
+
+export default ShowMore

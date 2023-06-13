@@ -1,15 +1,16 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, Fragment } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
-import Image from 'next/image'
-import { type SearchManufacturerProps } from '@/types'
+
 import { manufacturers } from '@/constants'
+import { type SearchManuFacturerProps } from '@/types'
 
 export default function SearchManufacturer({
   selected,
   setSelected
-}: SearchManufacturerProps) {
+}: SearchManuFacturerProps) {
   const [query, setQuery] = useState('')
 
   const filteredManufacturers =
@@ -17,9 +18,9 @@ export default function SearchManufacturer({
       ? manufacturers
       : manufacturers.filter((item) =>
           item
-            .toLocaleLowerCase()
+            .toLowerCase()
             .replace(/\s+/g, '')
-            .includes(query.toLocaleLowerCase().replace(/\s+/g, ''))
+            .includes(query.toLowerCase().replace(/\s+/g, ''))
         )
 
   return (
@@ -37,11 +38,11 @@ export default function SearchManufacturer({
           </Combobox.Button>
           <Combobox.Input
             className="search-manufacturer__input"
-            placeholder="Volkswagen"
-            displayValue={(manufacturer: string) => manufacturer}
-            onChange={(e) => {
-              setQuery(e.target.value)
-            }}
+            displayValue={(item: string) => item}
+            onChange={(event) => {
+              setQuery(event.target.value)
+            }} // Update the search query when the input changes
+            placeholder="Volkswagen..."
           ></Combobox.Input>
 
           <Transition
@@ -53,7 +54,7 @@ export default function SearchManufacturer({
               setQuery('')
             }}
           >
-            <Combobox.Options>
+            <Combobox.Options className="search-manufacturer__options" static>
               {filteredManufacturers.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Nothing found.

@@ -14,7 +14,7 @@ export interface CustomButtonProps {
   isDisable?: boolean
 }
 
-export interface SearchManufacturerProps {
+export interface SearchManuFacturerProps {
   selected: string
   setSelected: (manufacturer: string) => void
 }
@@ -35,6 +35,8 @@ export interface CarProps {
   error?: string
 }
 
+export type CarState = CarProps[] & { message?: string }
+
 export enum CarTransmission {
   manual = 'Manual',
   automatic = 'Automatic'
@@ -54,9 +56,8 @@ interface OptionsProps {
 }
 
 export interface CustomFilterProps {
-  title: string
   options: OptionsProps[]
-  setFilter: Dispatch<SetStateAction<string>> | Dispatch<SetStateAction<number>>
+  setFilter: (selected: T) => void
 }
 
 export interface ShowMoreProps {

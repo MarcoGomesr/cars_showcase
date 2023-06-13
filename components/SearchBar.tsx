@@ -1,7 +1,9 @@
 'use client'
-import { useState } from 'react'
-import { SearchManufacturer } from '@/components'
+
 import Image from 'next/image'
+import { useState } from 'react'
+
+import { SearchManufacturer } from '@/components'
 import { type SearchBarProps } from '@/types'
 
 const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
@@ -20,14 +22,17 @@ export default function SearchBar({
   setManuFacturer,
   setModel
 }: SearchBarProps) {
-  const [searchManufacturer, setSearchManufacturer] = useState('')
   const [searchModel, setSearchModel] = useState('')
+  const [searchManufacturer, setSearchManufacturer] = useState('')
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (searchManufacturer.trim() === '' && searchModel.trim() === '') {
       alert('Please enter a manufacturer and searchModel')
     }
+
+    setModel(searchModel)
+    setManuFacturer(searchManufacturer)
   }
 
   return (
@@ -49,11 +54,12 @@ export default function SearchBar({
         />
         <input
           type="text"
-          placeholder="Tiguan"
+          name="model"
           value={searchModel}
           onChange={(e) => {
             setSearchModel(e.target.value)
           }}
+          placeholder="Tiguan..."
           className="searchbar__input"
         />
         <SearchButton otherClasses="sm:hidden" />

@@ -1,25 +1,40 @@
 'use client'
-import { type CarProps } from '@/types'
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+
 import Image from 'next/image'
-import { generateCarImageUrl } from '@/services/getCars'
+import { Fragment } from 'react'
+
+import { Dialog, Transition } from '@headlessui/react'
+import { type CarProps } from '@/types'
+
+const imaginApiKey = process.env.NEXT_PUBLIC_IMAGIN_API_KEY ?? ''
+
+const CarDetailsImage = ({ car, angle }: { car: CarProps; angle: string }) => (
+  <div className="flex-1 relative w-full h-24 bg-primary-blue-100 rounded-lg">
+    <Image
+      src={`https://cdn.imagin.studio/getimage?customer=${imaginApiKey}&make=${
+        car.make
+      }&modelFamily=${
+        car.model.split(' ')[0]
+      }&zoomType=fullscreen&zoomLevel=30&modelYear=${car.year}&angle=${angle}`}
+      alt="car model"
+      fill
+      priority
+      className="object-contain"
+    />
+  </div>
+)
 
 interface CarDetailsProps {
   isOpen: boolean
-  closeModel: () => void
+  closeModal: () => void
   car: CarProps
 }
 
-export default function CarDetails({
-  car,
-  isOpen,
-  closeModel
-}: CarDetailsProps) {
+const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModel}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -42,11 +57,11 @@ export default function CarDetails({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="relative w-full max-w-lg max-h-[90vh] overflow-auto transform rounded-2xl bg-white p-6 text-left shadow-xl transition-all flex flex-col gap-5">
+                <Dialog.Panel className="car-details__dialog-panel">
                   <button
                     type="button"
-                    onClick={closeModel}
-                    className="absolute top-2 right-2 z-10 w-fit p-2 bg-primary-blue-100 rounded-full"
+                    className="car-details__close-btn"
+                    onClick={closeModal}
                   >
                     <Image
                       src="/close.svg"
@@ -56,40 +71,25 @@ export default function CarDetails({
                       className="object-contain"
                     ></Image>
                   </button>
+
                   <div className="flex-1 flex flex-col gap-3">
-                    <div className="relative w-full h-40 bg-pattern bg-cover bg-center rounded-lg">
+                    <div className="car-details__main-image">
                       <Image
-                        src={generateCarImageUrl(car)}
-                        alt="hero"
+                        src={`https://cdn.imagin.studio/getimage?customer=${imaginApiKey}&make=${
+                          car.make
+                        }&modelFamily=${
+                          car.model.split(' ')[0]
+                        }&zoomType=fullscreen&modelYear=${car.year}`}
+                        alt="car model"
                         fill
+                        priority
                         className="object-contain"
                       />
                     </div>
                     <div className="flex gap-3">
-                      <div className="flex-1 relative w-full h-24 bg-primary-blue-100 rounded-lg">
-                        <Image
-                          src={generateCarImageUrl(car, '29')}
-                          alt="hero"
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-                      <div className="flex-1 relative w-full h-24 bg-primary-blue-100 rounded-lg">
-                        <Image
-                          src={generateCarImageUrl(car, '33')}
-                          alt="hero"
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-                      <div className="flex-1 relative w-full h-24 bg-primary-blue-100 rounded-lg">
-                        <Image
-                          src={generateCarImageUrl(car, '13')}
-                          alt="hero"
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
+                      <CarDetailsImage car={car} angle="29" />
+                      <CarDetailsImage car={car} angle="33" />
+                      <CarDetailsImage car={car} angle="13" />
                     </div>
                   </div>
 
@@ -97,6 +97,7 @@ export default function CarDetails({
                     <h2 className="font-semibold text-xl capitalize">
                       {car.make} {car.model}
                     </h2>
+
                     <div className="mt-3 flex flex-wrap gap-4">
                       {Object.entries(car).map(([key, value]) => (
                         <div
@@ -120,3 +121,5 @@ export default function CarDetails({
     </>
   )
 }
+
+export default CarDetails

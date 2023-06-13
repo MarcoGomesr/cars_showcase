@@ -1,94 +1,93 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
-import { CustomFilter, SearchBar, Hero, CarCard, ShowMore } from '@/components'
 import { fuels, yearsOfProduction } from '@/constants'
-import { getCars } from '@/services/getCars'
-import { type FilterProps, type CarProps } from '@/types'
+import { CarCard, ShowMore, SearchBar, CustomFilter, Hero } from '@/components'
 
-export default async function Home() {
-  const [allCars, setAllCars] = useState<CarProps[]>([])
+import { type FilterProps, type CarState } from '@/types'
+import { fetchCars } from '@/services/getCars'
+
+export default function Home() {
+  const [allCars, setAllCars] = useState<CarState>([])
   const [loading, setLoading] = useState(false)
 
   // search states
   const [manufacturer, setManuFacturer] = useState('')
   const [model, setModel] = useState('')
 
-  // filter states
+  // filter state
   const [fuel, setFuel] = useState('')
-  const [year, setYear] = useState(2005)
+  const [year, setYear] = useState(2022)
 
-  // pagination states
+  // limit state
   const [limit, setLimit] = useState(10)
 
-  const getAllCars = async () => {
+  const getCars = async () => {
     setLoading(true)
     try {
       const filter: FilterProps = {
         manufacturer: manufacturer.toLowerCase(),
-        model,
-        fuel,
+        model: model.toLowerCase(),
+        fuel: fuel.toLowerCase(),
         year,
         limit
       }
 
-      const result = await getCars(filter)
+      const result = await fetchCars(filter)
+
       setAllCars(result)
-    } catch (error) {
-      console.error(error)
+    } catch {
+      console.error()
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    getAllCars()
-    console.log('eeee')
-    console.log(fuel, year, limit, manufacturer, model)
-  }, [])
+    getCars()
+  }, [fuel, year, limit, manufacturer, model])
 
   return (
-    <main className="overflow-hiden">
+    <main className="overflow-hidden">
       <Hero />
+
       <div className="mt-12 padding-x padding-y max-width" id="discover">
         <div className="home__text-container">
-          <h1 className="text-4xl font-extrabold">Car Catalog</h1>
-          <p>Explore the cars you might like</p>
+          <h1 className="text-4xl font-extrabold">Car Catalogue</h1>
+          <p>Explore out cars you might like</p>
         </div>
+
         <div className="home__filters">
           <SearchBar setManuFacturer={setManuFacturer} setModel={setModel} />
+
           <div className="home__filter-container">
-            <CustomFilter title="fuel" options={fuels} setFilter={setFuel} />
-            <CustomFilter
-              title="year"
-              options={yearsOfProduction}
-              setFilter={setYear}
-            />
+            <CustomFilter options={fuels} setFilter={setFuel} />
+            <CustomFilter options={yearsOfProduction} setFilter={setYear} />
           </div>
         </div>
 
         {allCars.length > 0 ? (
           <section>
             <div className="home__cars-wrapper">
-              {allCars.map((car, index) => {
-                const id = `${car.make}-${car.model}-${index}`
-                return <CarCard car={car} key={id} />
-              })}
+              {allCars?.map((car, index) => (
+                <CarCard key={`car-${index}`} car={car} />
+              ))}
             </div>
 
             {loading && (
-              <div>
+              <div className="mt-16 w-full flex-center">
                 <Image
-                  src="/loader.svg"
-                  alt="Loading"
+                  src="./loader.svg"
+                  alt="loader"
                   width={50}
                   height={50}
                   className="object-contain"
                 />
               </div>
             )}
+
             <ShowMore
               pageNumber={limit / 10}
               isNext={limit > allCars.length}
@@ -96,9 +95,12 @@ export default async function Home() {
             />
           </section>
         ) : (
-          <div className="home__error-container">
-            <h2 className="text-back text-sl">Oops, no results</h2>
-          </div>
+          !loading && (
+            <div className="home__error-container">
+              <h2 className="text-black text-xl font-bold">Oops, no results</h2>
+              <p>{allCars?.message}</p>
+            </div>
+          )
         )}
       </div>
     </main>
