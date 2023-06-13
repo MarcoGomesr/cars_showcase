@@ -18,7 +18,23 @@ export async function fetchCars(filters: FilterProps) {
 
   const result = await response.json()
 
-  return result
+  return result.map(
+    (car: {
+      city_mpg: string
+      manufacturer: string
+      year: number
+      model: string
+      fuel: string
+      limit: number
+    }) => ({
+      cityMpg: car.city_mpg,
+      manufacturer: car.manufacturer,
+      year: car.year,
+      model: car.model,
+      fuel: car.fuel,
+      limit: car.limit
+    })
+  )
 }
 
 // export const generateCarImageUrl = (car: CarProps, angle?: string) => {

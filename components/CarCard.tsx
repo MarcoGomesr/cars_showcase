@@ -14,7 +14,7 @@ interface CarCardProps {
 
 export default function CarCard({ car }: CarCardProps) {
   const [isLiked, setIsLiked] = useState(false)
-  const { city_mpg, year, make, model, transmission, drive } = car
+  const { cityMpg, year, make, model, transmission, drive } = car
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -28,7 +28,7 @@ export default function CarCard({ car }: CarCardProps) {
     setIsOpen(true)
   }
 
-  const carRent = calculateCarRent(city_mpg, year)
+  const carRent = calculateCarRent(cityMpg, year)
 
   return (
     <div className="car-card group">
